@@ -34,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED)||(ContextCompat.checkSelfPermission(thisActivity,
                 Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED)||(ContextCompat.checkSelfPermission(thisActivity,
+                Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED)||(ContextCompat.checkSelfPermission(thisActivity,
+                Manifest.permission.RECEIVE_SMS)
                 != PackageManager.PERMISSION_GRANTED) ){
 
 //            // Should we show an explanation?
@@ -50,13 +54,14 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "myCheckPermission() if called with: " + "thisActivity = [" + thisActivity + "]");
 
                 ActivityCompat.requestPermissions(thisActivity,
-                        new String[]{Manifest.permission.READ_PHONE_STATE,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.INTERNET},
+                        new String[]{Manifest.permission.READ_PHONE_STATE,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.INTERNET,Manifest.permission.SEND_SMS,Manifest.permission.RECEIVE_SMS},
                         MY_PERMISSIONS_REQUEST_READ_CONTACTS);
 
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                 // app-defined int constant. The callback method gets the
                 // result of the request.
             //}
+
         }
         else{
             Log.d(TAG, "myCheckPermission() else called with: " + "thisActivity = [" + thisActivity + "]");

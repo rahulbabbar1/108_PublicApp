@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 public class GetLocation extends Service {
     public String TAG="getlocation";
+    public int count=0;
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -44,8 +46,12 @@ public class GetLocation extends Service {
             public void onLocationChanged(Location location) {
                 //Called when a new location is found by the network location provider.
                 //makeUseOfNewLocation(location);
-                Toast.makeText(GetLocation.this, "onLocationChanged() called with: " + "location [ longitude = " + location.getLongitude() + " latitude = " + location.getLatitude() + "]",Toast.LENGTH_LONG).show();
+                if(count==0){
+                    sendSMS(location.getLatitude(),location.getLongitude());
+                }
+                //Toast.makeText(GetLocation.this, "onLocationChanged() called with: " + "location [ longitude = " + location.getLongitude() + " latitude = " + location.getLatitude() + "]",Toast.LENGTH_LONG).show();
                 Log.d(TAG, "onLocationChanged() called with: " + "location [ longitude = " + location.getLongitude() + " latitude = " + location.getLatitude() + " type: " +location.getProvider() + " accuracy : " + location.getAccuracy()+"]" );
+                count++;
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -54,7 +60,6 @@ public class GetLocation extends Service {
 
             public void onProviderDisabled(String provider) {}
         };
-
 
 // Register the listener with the Location Manager to receive location updates
         Log.d(TAG, "onCreate() permission called with: " + ContextCompat.checkSelfPermission(GetLocation.this,
@@ -109,5 +114,18 @@ public class GetLocation extends Service {
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
+    }
+
+    public void sendSMS(final double latitude, final double longitude){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // do the thing that takes a long time
+                Log.d(TAG, "sendSMS run() called with: " + "");
+                String smsBody = "Latiitude: [" + latitude + "] " +  "Longitude: [" + longitude + "] ";
+                SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage(Constants.serverNumber, null, smsBody, null, null);
+            }
+        }).start();
     }
 }
