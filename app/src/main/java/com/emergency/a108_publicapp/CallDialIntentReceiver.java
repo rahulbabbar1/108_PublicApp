@@ -26,8 +26,8 @@ public class CallDialIntentReceiver extends BroadcastReceiver{
             if(state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)){
                 if (intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)!=null){
                     if (intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER).equals("108")){
-                        Toast.makeText(context, "Call Recieved"  + intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER), Toast.LENGTH_LONG).show();
-                        Intent i =new Intent(context, LocationSender.class);
+                        //Toast.makeText(context, "Call Recieved"  + intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER), Toast.LENGTH_LONG).show();
+                        Intent i =new Intent(context, GetLocation.class);
                         context.startService(i);
                     }
                 }
