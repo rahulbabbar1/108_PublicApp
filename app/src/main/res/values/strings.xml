@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">108_PublicApp</string>
+    <string name="shared_preference_name">108Data</string>
+    <string name="shared_preference_login">isLoggedIn</string>
 </resources>

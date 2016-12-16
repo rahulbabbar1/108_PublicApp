@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,8 +10,49 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.emergency.a108_publicapp.MainActivity">
 
-    <TextView
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:srcCompat="@mipmap/cross"
+        android:id="@+id/status_image"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Give Permisiions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_marginTop="38dp"
+        android:id="@+id/permissions_button"
+        android:layout_below="@+id/status_image"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="Permission Required!!!"
+        android:textColor="#DC143C"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/status_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:id="@+id/status_textView" />
+
+    <TextView
+        android:text="In emergency!!, Call 108 Now!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/permissions_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp"
+        android:id="@+id/textview_108" />
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@android:drawable/sym_action_call"
+        android:background="#00000000"
+        android:layout_marginTop="17dp"
+        android:id="@+id/call_108"
+        android:layout_below="@+id/textview_108"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
