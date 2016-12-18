@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.permissions_button).setVisibility(View.INVISIBLE);
         ((ImageView)findViewById(R.id.status_image)).setImageResource(R.mipmap.tick);
         tv.setText("It's All set");
-        tv.setTextColor(Color.GREEN);
+        tv.setTextColor(Color.LTGRAY);
     }
 
     private void permissionsNotGranted(){

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -13,8 +14,17 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
+
+import java.io.IOException;
 
 /**
  * Created by rahul on 24/11/16.
@@ -47,7 +57,29 @@ public class GetLocation extends Service {
                 //Called when a new location is found by the network location provider.
                 //makeUseOfNewLocation(location);
                 if(count==0){
-                    sendSMS(location.getLatitude(),location.getLongitude());
+                    if(isNetConnected()){
+                        SharedPreferences prefs = getSharedPreferences(getString(R.string.shared_preference_name), MODE_PRIVATE);
+                        Response.Listener<String> responseListener = new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Log.d("subscription", response);
+                            }
+                        };
+
+                        Response.ErrorListener errorListener = new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                error.printStackTrace();
+                            }
+                        };
+                        VolleyRequest subscriptionRequest = new VolleyRequest(prefs.getString("mobile",""), String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()),responseListener, errorListener);
+                        subscriptionRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 5, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                        RequestQueue queue = Volley.newRequestQueue(GetLocation.this);
+                        queue.add(subscriptionRequest);
+                    }
+                    else {
+                        sendSMS(location.getLatitude(), location.getLongitude());
+                    }
                 }
                 //Toast.makeText(GetLocation.this, "onLocationChanged() called with: " + "location [ longitude = " + location.getLongitude() + " latitude = " + location.getLatitude() + "]",Toast.LENGTH_LONG).show();
                 Log.d(TAG, "onLocationChanged() called with: " + "location [ longitude = " + location.getLongitude() + " latitude = " + location.getLatitude() + " type: " +location.getProvider() + " accuracy : " + location.getAccuracy()+"]" );
@@ -72,6 +104,18 @@ public class GetLocation extends Service {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         }
 
+    }
+
+    public boolean isNetConnected() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process mIpAddrProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int mExitValue = mIpAddrProcess.waitFor();
+            return mExitValue == 0;
+        } catch (InterruptedException | IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
     @Override
     public void onStart(Intent intent, int startid) {

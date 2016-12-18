@@ -175,9 +175,12 @@ public class LoginActivity extends AppCompatActivity implements VerticalStepperF
         RadioButton male= new RadioButton(this);
         male.setText("Male");
         RadioButton female= new RadioButton(this);
-        female.setText("female");
+        female.setText("Female");
+        RadioButton trans= new RadioButton(this);
+        trans.setText("Transgender");
         gender.addView(male);
         gender.addView(female);
+        gender.addView(trans);
         gender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -393,6 +396,7 @@ public class LoginActivity extends AppCompatActivity implements VerticalStepperF
 
         SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.shared_preference_name), MODE_PRIVATE).edit();
         editor.putBoolean(getString(R.string.shared_preference_login),true);
+        editor.putString("mobile",phoneNumber);
         editor.commit();
 
         Intent intentMainActivity = new Intent(this,MainActivity.class);
