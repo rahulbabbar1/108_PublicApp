@@ -23,12 +23,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.androidadvance.topsnackbar.TSnackbar;
+
 import static java.security.AccessController.getContext;
 
 public class HomeActivity extends AppCompatActivity {
 
     public String TAG= "homeactivity";
-    private Snackbar snack;
+    private TSnackbar snack;
     private ImageView callEmergency;
     private TextView nearbyMap;
     private NearbyBottomSheetDialog nearbyBottomSheetDialog;
@@ -43,6 +45,9 @@ public class HomeActivity extends AppCompatActivity {
         callEmergency = (ImageView)findViewById(R.id.call_emergency);
         nearbyMap = (TextView)findViewById(R.id.btn_nearby_map);
 
+        snack = TSnackbar.make(findViewById(R.id.frame_layout),"Please give Permissions.", TSnackbar.LENGTH_INDEFINITE);
+
+
         /*
         String str ="Permission Granted";
         FrameLayout parentLayout =(FrameLayout) findViewById(R.id.parent_home_content);
@@ -52,14 +57,14 @@ public class HomeActivity extends AppCompatActivity {
         params.gravity = Gravity.TOP;
         params.setMargins(0,dpToPx(56),0,0);
         view.setLayoutParams(params);
-        snack.show();
+        snack.show();*/
 
         if(checkPermissions()){
             permissionsGranted();
         }else{
             permissionsNotGranted();
         }
-        */
+
 
         callEmergency.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,18 +113,21 @@ public class HomeActivity extends AppCompatActivity {
 
     private void permissionsGranted(){
         snack.setText("Thank you. All requested permissions are available.");
-        snack.setDuration(Snackbar.LENGTH_SHORT);
+        snack.setDuration(TSnackbar.LENGTH_SHORT);
+        snack.show();
         callEmergency.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_call_blue_24px));
     }
 
     private void permissionsNotGranted(){
         snack.setText("Required permissions are not granted yet.");
+        snack.setDuration(TSnackbar.LENGTH_INDEFINITE);
         snack.setAction("Grant", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 requestPermissions();
             }
         });
+        snack.show();
         callEmergency.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_call_black_24px));
     }
 
