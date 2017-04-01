@@ -2,6 +2,7 @@
     <string name="app_name">108_PublicApp</string>
     <string name="shared_preference_name">108Data</string>
     <string name="shared_preference_login">isLoggedIn</string>
+    <string name="delete">Delete</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
@@ -93,4 +94,6 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_circle_of__trust">Circle_of_Trust</string>
+    <string name="circle_of_trust">Circle Of Trust</string>
 </resources>
