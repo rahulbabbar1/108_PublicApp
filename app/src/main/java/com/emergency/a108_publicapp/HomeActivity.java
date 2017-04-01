@@ -30,6 +30,9 @@ public class HomeActivity extends AppCompatActivity {
     public String TAG= "homeactivity";
     private Snackbar snack;
     private ImageView callEmergency;
+    private TextView nearbyMap;
+    private NearbyBottomSheetDialog nearbyBottomSheetDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +41,9 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         callEmergency = (ImageView)findViewById(R.id.call_emergency);
+        nearbyMap = (TextView)findViewById(R.id.btn_nearby_map);
 
+        /*
         String str ="Permission Granted";
         FrameLayout parentLayout =(FrameLayout) findViewById(R.id.parent_home_content);
         snack = Snackbar.make(parentLayout, str, Snackbar.LENGTH_INDEFINITE);
@@ -54,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
         }else{
             permissionsNotGranted();
         }
+        */
 
         callEmergency.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +68,13 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        nearbyBottomSheetDialog = NearbyBottomSheetDialog.getInstance();
+        nearbyMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nearbyBottomSheetDialog.show(getSupportFragmentManager(), nearbyBottomSheetDialog.getTag());
+            }
+        });
         }
 
 
@@ -94,7 +107,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void permissionsGranted(){
-        snack.setText("Thank you. All required permissions available.");
+        snack.setText("Thank you. All requested permissions are available.");
         snack.setDuration(Snackbar.LENGTH_SHORT);
         callEmergency.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_call_blue_24px));
     }

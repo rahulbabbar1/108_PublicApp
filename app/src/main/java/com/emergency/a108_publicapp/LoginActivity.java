@@ -17,7 +17,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -399,8 +398,8 @@ public class LoginActivity extends AppCompatActivity implements VerticalStepperF
         editor.putString("mobile",phoneNumber);
         editor.commit();
 
-        Intent intentMainActivity = new Intent(this,MainActivity.class);
-        startActivity(intentMainActivity);
+        Intent intentHomeActivity = new Intent(this,HomeActivity.class);
+        startActivity(intentHomeActivity);
         finish();
     }
 
