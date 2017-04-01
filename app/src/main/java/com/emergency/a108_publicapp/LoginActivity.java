@@ -59,6 +59,8 @@ public class LoginActivity extends AppCompatActivity implements VerticalStepperF
     private Button buttonOTP;
     private RadioGroup gender;
     private EditText otp;
+    private EditText bloodgroup;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,7 @@ public class LoginActivity extends AppCompatActivity implements VerticalStepperF
         setContentView(R.layout.activity_login);
         Dexter.initialize(this);
 
-        String[] mySteps = {"Name", "Age", "Gender", "Phone Number", "OTP", "Permissions"};
+        String[] mySteps = {"Name", "Age", "Gender", "BloodGroup", "Phone Number", "OTP", "Permissions"};
         int colorPrimary = ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary);
         int colorPrimaryDark = ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark);
 
@@ -97,12 +99,15 @@ public class LoginActivity extends AppCompatActivity implements VerticalStepperF
                 view = createGenderStep();
                 break;
             case 3:
-                view = createPhoneNumberStep();
+                view = createBloodGroupStep();
                 break;
             case 4:
-                view = createOTPStep();
+                view = createPhoneNumberStep();
                 break;
             case 5:
+                view = createOTPStep();
+                break;
+            case 6:
                 view = createPermissionStep();
                 break;
         }
@@ -187,6 +192,35 @@ public class LoginActivity extends AppCompatActivity implements VerticalStepperF
             }
         });
         return gender;
+    }
+
+    private View createBloodGroupStep() {
+        // In this case we generate the view by inflating a XML file
+        bloodgroup = new EditText(this);
+        bloodgroup.setSingleLine(true);
+        bloodgroup.setHint("Your Blood Goup");
+        bloodgroup.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkBloodGroup(s.toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        bloodgroup.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(checkBloodGroup(v.getText().toString().trim())) {
+                    verticalStepperForm.goToNextStep();
+                }
+                return false;
+            }
+        });
+        return bloodgroup;
     }
 
     private View createPhoneNumberStep() {
@@ -289,6 +323,9 @@ public class LoginActivity extends AppCompatActivity implements VerticalStepperF
                 checkGender();
                 break;
             case 3:
+                checkBloodGroup(bloodgroup.getText().toString().trim());
+                break;
+            case 4:
                 checkPhone(phone.getText().toString());
                 // As soon as the phone number step is open, we mark it as completed in order to show the "Continue"
                 // button (We do it because this field is optional, so the user can skip it without giving any info)
@@ -296,7 +333,7 @@ public class LoginActivity extends AppCompatActivity implements VerticalStepperF
                 // In this case, the instruction above is equivalent to:
                 // verticalStepperForm.setActiveStepAsCompleted();
                 break;
-            case 4:
+            case 5:
                 checkOTP(otp.getText().toString());
                 // As soon as the phone number step is open, we mark it as completed in order to show the "Continue"
                 // button (We do it because this field is optional, so the user can skip it without giving any info)
@@ -304,7 +341,7 @@ public class LoginActivity extends AppCompatActivity implements VerticalStepperF
                 // In this case, the instruction above is equivalent to:
                 // verticalStepperForm.setActiveStepAsCompleted();
                 break;
-            case 5:
+            case 6:
                 if(!checkPermissions()){
                     requestPermissions();
                 }
@@ -319,6 +356,18 @@ public class LoginActivity extends AppCompatActivity implements VerticalStepperF
         } else {
             // This error message is optional (use null if you don't want to display an error message)
             String errorMessage = "The name must have between 3 and 40 characters";
+            verticalStepperForm.setActiveStepAsUncompleted(errorMessage);
+            return false;
+        }
+    }
+
+    private boolean checkBloodGroup(String name) {
+        if(name.length() >= 0) {
+            verticalStepperForm.setActiveStepAsCompleted();
+            return true;
+        } else {
+            // This error message is optional (use null if you don't want to display an error message)
+            String errorMessage = "Please fill the blood group";
             verticalStepperForm.setActiveStepAsUncompleted(errorMessage);
             return false;
         }
@@ -390,6 +439,7 @@ public class LoginActivity extends AppCompatActivity implements VerticalStepperF
     public void sendData() {
         String phoneNumber = phone.getText().toString();
         sendDataToFirebase("users/"+phoneNumber+"/name",name.getText().toString());
+        sendDataToFirebase("users/"+phoneNumber+"/bloodgroup",bloodgroup.getText().toString());
         sendDataToFirebase("users/"+phoneNumber+"/age",age.getText().toString());
         sendDataToFirebase("users/"+phoneNumber+"/gender",((RadioButton)findViewById(gender.getCheckedRadioButtonId())).getText().toString());
 
