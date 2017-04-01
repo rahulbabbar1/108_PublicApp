@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.ViewUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,13 +25,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.androidadvance.topsnackbar.TSnackbar;
+
+import java.util.zip.Inflater;
 
 import static java.security.AccessController.getContext;
 
@@ -41,6 +48,7 @@ public class HomeActivity extends AppCompatActivity {
     private ImageView callEmergency;
     private TextView nearbyMap;
     private NearbyBottomSheetDialog nearbyBottomSheetDialog;
+    private LinearLayout hrsvLL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +83,18 @@ public class HomeActivity extends AppCompatActivity {
                 nearbyBottomSheetDialog.show(getSupportFragmentManager(), nearbyBottomSheetDialog.getTag());
             }
         });
+
+        hrsvLL = (LinearLayout) findViewById(R.id.hrsv_ll);
+        fetchTrustContacts();
     }
 
 
-
+    private void fetchTrustContacts(){
+        for(int i=0;i<5;i++){
+            RelativeLayout imageView = (RelativeLayout) getLayoutInflater().inflate(R.layout.circular_item, null);
+            hrsvLL.addView(imageView);
+        }
+    }
 
 
     public boolean checkPermissions(){
