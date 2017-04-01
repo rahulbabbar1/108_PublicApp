@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff">
+
+    <com.github.pavlospt.CircleView
+        android:id="@+id/cicleView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        app:cv_titleText="title"
+        app:cv_subtitleText=""
+        app:cv_titleSize="30dp"
+        app:cv_subtitleSize="13dp"
+        app:cv_titleColor="#00FFFF"
+        app:cv_subtitleColor="#fff"
+        app:cv_strokeColorValue="#fff"
+        app:cv_backgroundColorValue="#00ffff"
+        app:cv_fillColor="#444444"
+        app:cv_fillRadius="0.9"
+        app:cv_strokeWidthSize="5"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="92dp" />
+
+</RelativeLayout>

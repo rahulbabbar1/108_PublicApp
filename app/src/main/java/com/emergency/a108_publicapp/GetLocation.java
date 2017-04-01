@@ -32,76 +32,85 @@ import java.io.IOException;
 
 
 public class GetLocation extends Service {
-    public String TAG="getlocation";
-    public int count=0;
+    public String TAG = "getlocation";
+    public int count = 0;
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+
     @Override
     public void onCreate() {
         Log.d(TAG, "onCreate() called with: " + "");
         // Acquire a reference to the system Location Manager
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        if(!locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-            Toast.makeText(GetLocation.this,"Please Enable Location first",Toast.LENGTH_LONG).show();
+        if (!locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            Toast.makeText(GetLocation.this, "Please Enable Location first", Toast.LENGTH_LONG).show();
             showSettings(GetLocation.this);
-        }
-        else{
+        } else {
 
         }
 
 // Define a listener that responds to location updates
         LocationListener locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
+            public void onLocationChanged(final Location location) {
                 //Called when a new location is found by the network location provider.
                 //makeUseOfNewLocation(location);
-                if(count==0){
-                    if(isNetConnected()){
+                if (count == 0) {
+                    if (isNetConnected()) {
                         SharedPreferences prefs = getSharedPreferences(getString(R.string.shared_preference_name), MODE_PRIVATE);
                         Response.Listener<String> responseListener = new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                Log.d("subscription", response);
+                                Log.d("network response", response);
+                                stopSelf();
                             }
                         };
 
                         Response.ErrorListener errorListener = new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
+                                sendSMS(location.getLatitude(), location.getLongitude());
                                 error.printStackTrace();
+                                stopSelf();
+
                             }
                         };
-                        VolleyRequest subscriptionRequest = new VolleyRequest(prefs.getString("mobile",""), String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()),responseListener, errorListener);
+                        VolleyRequest subscriptionRequest = new VolleyRequest(prefs.getString("mobile", ""), String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), responseListener, errorListener);
                         subscriptionRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 5, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                         RequestQueue queue = Volley.newRequestQueue(GetLocation.this);
                         queue.add(subscriptionRequest);
-                    }
-                    else {
+                    } else {
                         sendSMS(location.getLatitude(), location.getLongitude());
+                        stopSelf();
                     }
                 }
+
                 //Toast.makeText(GetLocation.this, "onLocationChanged() called with: " + "location [ longitude = " + location.getLongitude() + " latitude = " + location.getLatitude() + "]",Toast.LENGTH_LONG).show();
-                Log.d(TAG, "onLocationChanged() called with: " + "location [ longitude = " + location.getLongitude() + " latitude = " + location.getLatitude() + " type: " +location.getProvider() + " accuracy : " + location.getAccuracy()+"]" );
+                Log.d(TAG, "onLocationChanged() called with: " + "location [ longitude = " + location.getLongitude() + " latitude = " + location.getLatitude() + " type: " + location.getProvider() + " accuracy : " + location.getAccuracy() + "]");
                 count++;
             }
 
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
 
-            public void onProviderEnabled(String provider) {}
+            public void onProviderEnabled(String provider) {
+            }
 
-            public void onProviderDisabled(String provider) {}
+            public void onProviderDisabled(String provider) {
+            }
         };
 
 // Register the listener with the Location Manager to receive location updates
         Log.d(TAG, "onCreate() permission called with: " + ContextCompat.checkSelfPermission(GetLocation.this,
                 Manifest.permission.ACCESS_FINE_LOCATION) + "");
-        if((ContextCompat.checkSelfPermission(GetLocation.this,
+        if ((ContextCompat.checkSelfPermission(GetLocation.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED)){
+                == PackageManager.PERMISSION_GRANTED)) {
             Log.d(TAG, "onCreate() inside if called with: " + "");
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         }
 
     }
@@ -117,18 +126,19 @@ public class GetLocation extends Service {
         }
         return false;
     }
+
     @Override
     public void onStart(Intent intent, int startid) {
-        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Getting location", Toast.LENGTH_SHORT).show();
     }
+
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "Service Stopped", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Location sent successfully", Toast.LENGTH_SHORT).show();
     }
 
 
-
-    public void showSettings(Context mContext){
+    public void showSettings(Context mContext) {
 //        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
 //
 //        // Setting Dialog Title
@@ -160,17 +170,11 @@ public class GetLocation extends Service {
         mContext.startActivity(intent);
     }
 
-    public void sendSMS(final double latitude, final double longitude){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // do the thing that takes a long time
-                Log.d(TAG, "sendSMS run() called with: " + "");
-                String smsBody = "Laterox Latitude: [" + latitude + "] " +  "Longitude: [" + longitude + "] ";
-                SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(Constants.serverNumber, null, smsBody, null, null);
-            }
-        }).start();
+    public void sendSMS(final double latitude, final double longitude) {
+        Log.d(TAG, "sendSMS run() called with: " + "");
+        String smsBody = "Laterox Latitude: [" + latitude + "] " + "Longitude: [" + longitude + "] ";
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(Constants.serverNumber, null, smsBody, null, null);
     }
 
 
