@@ -7,6 +7,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,7 +52,7 @@ public class HomeActivity extends AppCompatActivity {
         callEmergency = (ImageView)findViewById(R.id.call_emergency);
         nearbyMap = (TextView)findViewById(R.id.btn_nearby_map);
 
-        snack = TSnackbar.make(findViewById(R.id.frame_layout),"Please give Permissions.", TSnackbar.LENGTH_INDEFINITE);
+        snack = TSnackbar.make(findViewById(R.id.parent_home_content),"Please give Permissions.", TSnackbar.LENGTH_INDEFINITE);
 
         if(checkPermissions()){
             permissionsGranted();
@@ -71,7 +75,7 @@ public class HomeActivity extends AppCompatActivity {
                 nearbyBottomSheetDialog.show(getSupportFragmentManager(), nearbyBottomSheetDialog.getTag());
             }
         });
-        }
+    }
 
 
 
@@ -122,6 +126,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private static final  int MY_PERMISSIONS_REQUEST_CODE =101;
+
     private void requestPermissions(){
         ActivityCompat.requestPermissions(this,
                 new String[]{android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.INTERNET, android.Manifest.permission.SEND_SMS, android.Manifest.permission.RECEIVE_SMS, android.Manifest.permission.CALL_PHONE},
@@ -168,9 +173,17 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_edit_ac){
-            Intent intent = new Intent();
+            Intent intent = new Intent(getApplicationContext(), CircleOfTrustActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
 }
+
+
+
+
