@@ -2,9 +2,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.emergency.a108_publicapp.HomeActivity">
+
+    <item
+        android:id="@+id/action_edit_ac"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@drawable/account_edit"
+        android:title="Edit Account"/>
+    <!--
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+        -->
 </menu>

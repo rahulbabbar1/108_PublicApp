@@ -17,6 +17,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -46,18 +49,6 @@ public class HomeActivity extends AppCompatActivity {
         nearbyMap = (TextView)findViewById(R.id.btn_nearby_map);
 
         snack = TSnackbar.make(findViewById(R.id.frame_layout),"Please give Permissions.", TSnackbar.LENGTH_INDEFINITE);
-
-
-        /*
-        String str ="Permission Granted";
-        FrameLayout parentLayout =(FrameLayout) findViewById(R.id.parent_home_content);
-        snack = Snackbar.make(parentLayout, str, Snackbar.LENGTH_INDEFINITE);
-        View view = snack.getView();
-        CoordinatorLayout.LayoutParams params =(CoordinatorLayout.LayoutParams)view.getLayoutParams();
-        params.gravity = Gravity.TOP;
-        params.setMargins(0,dpToPx(56),0,0);
-        view.setLayoutParams(params);
-        snack.show();*/
 
         if(checkPermissions()){
             permissionsGranted();
@@ -167,8 +158,19 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    public int dpToPx(int dp) {
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_edit_ac){
+            Intent intent = new Intent();
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
