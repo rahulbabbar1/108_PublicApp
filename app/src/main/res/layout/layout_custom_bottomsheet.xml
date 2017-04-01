@@ -1,34 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14dp"
+        android:padding="8dp"
+        android:text="NEARBY PLACES:"
+        android:textColor="#999999"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_call_blue_24px"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_call_blue_24px"/>
+        <TextView
+            android:id="@+id/btn_hospital_map"
+            android:gravity="center_horizontal"
+            android:text="Hospital"
+            android:layout_width="82dp"
+            android:layout_height="72dp"
+            android:padding="6dp"
+            android:drawableTop="@drawable/ic_local_hospital_black_24px"/>
+        <TextView
+            android:id="@+id/btn_police_map"
+            android:gravity="center_horizontal"
+            android:text="Police Station"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:padding="16dp"
+            android:drawableTop="@drawable/security_24px"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_call_blue_24px"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_call_blue_24px"/>
+        <TextView
+            android:id="@+id/btn_petrol_map"
+            android:gravity="center_horizontal"
+            android:text="Petrol"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:padding="16dp"
+            android:drawableTop="@drawable/ic_local_gas_station_black_24px"/>
+        <TextView
+            android:id="@+id/btn_food_map"
+            android:gravity="center_horizontal"
+            android:text="Food"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:padding="16dp"
+            android:drawableTop="@drawable/ic_local_pizza_black_24px"/>
     </LinearLayout>
 
 </LinearLayout>

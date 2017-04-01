@@ -104,7 +104,6 @@ public class HomeActivity extends AppCompatActivity {
 
             Log.d(TAG, "myCheckPermission() if called with: " + "thisActivity = [" + this + "]");
             return false;
-
         }
         else{
             return true;
