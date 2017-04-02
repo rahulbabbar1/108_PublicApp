@@ -4,6 +4,8 @@
     <string name="shared_preference_login">isLoggedIn</string>
     <string name="delete">Delete</string>
     <string name="title_activity_home">HomeActivity</string>
+    <string name="key">AIzaSyAVrAs49EdgKRuFJSOedzO-s--AldjRiuQ</string>
+
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

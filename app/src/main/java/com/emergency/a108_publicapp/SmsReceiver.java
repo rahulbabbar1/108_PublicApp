@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 public class SmsReceiver extends BroadcastReceiver {
 
     static String recievedMSG = null;
-     String time;
+     String time,requestID;
     static String TAG = "smsreceiver";
 
     @Override
@@ -38,9 +38,13 @@ public class SmsReceiver extends BroadcastReceiver {
                     Pattern pattern = Pattern.compile(regex);
                     Matcher matcher = pattern.matcher(recievedMSG);
                     if (matcher.find()) {
-                        time = matcher.group(1);
-                        Intent i = new Intent(context, TimerClass.class);
-                        i.putExtra("time", time);
+//                        time = matcher.group(1);
+//                        Log.d(TAG," time = " + time + " reqId = "+requestID);
+                        requestID = matcher.group(1);
+                        Log.d(TAG," time = " + time + " reqId = "+requestID);
+                        Intent i = new Intent(context, TrackActivity.class);
+                        //i.putExtra("time", time);
+                        i.putExtra("requestId", requestID);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(i);
                     }
