@@ -12,8 +12,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 /**
  * Created by rahul on 2/4/17.
@@ -53,6 +55,15 @@ public class AfterPopup extends Service implements View.OnTouchListener, View.On
 
         linearLayout.setOnTouchListener(this);
         linearLayout.setOnKeyListener(this);
+
+        Button button = (Button) linearLayout.findViewById(R.id.btn_send_req_details);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(AfterPopup.this, "Details Submitted Succesfully", Toast.LENGTH_SHORT).show();
+                hide();
+            }
+        });
 
         isVisible = false;
 

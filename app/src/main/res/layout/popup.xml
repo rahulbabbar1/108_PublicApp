@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="#eeeeee"
     android:padding="16dp"
-    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored">
+    style="@drawable/border">
 
         <EditText
             android:id="@+id/input_victim_count"
@@ -30,7 +30,7 @@
         android:stepSize="1.0"
         android:numStars="5"
         android:rating="2.0"
-        
+        android:theme="@style/RatingBar"
         />
 
     <LinearLayout

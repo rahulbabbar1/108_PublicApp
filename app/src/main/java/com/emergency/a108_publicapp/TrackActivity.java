@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -36,6 +37,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -79,6 +81,8 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     private BottomSheetBehavior bottomSheetBehavior;
 
     FirebaseDatabase database;
+
+    MarkerOptions clientPosition2;
 
     //TODO Convert int to float
     @Override
@@ -221,6 +225,14 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
                 clientPosition = new MarkerOptions().position(latLng).title("Emergency");
                 m_map.moveCamera(CameraUpdateFactory.newCameraPosition(target));
                 m_map.addMarker(clientPosition);
+                LatLng latLngUser = new LatLng(Float.parseFloat(latUser), Float.parseFloat(lngUser));
+                clientPosition2 = new MarkerOptions().position(latLngUser).title("Me");
+                m_map.addMarker(clientPosition2);
+                m_map.addPolyline(new PolylineOptions()
+                        .add(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)),
+                                new LatLng(Double.parseDouble(latUser), Double.parseDouble(lngUser)))
+                        .width(5).color(Color.BLUE).geodesic(true));
+                getDistance();
             }
         }
     }
@@ -312,6 +324,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
                 Log.d("subscription", response);
                 try {
                     JSONObject jsonResponse = new JSONObject(response);
+                    Log.d(TAG, "distance onResponse() called with: response = [" + response + "]");
                     timeLeft.setText(jsonResponse.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0).getJSONObject("duration").getString("text"));
                 } catch (JSONException e) {
                     e.printStackTrace();

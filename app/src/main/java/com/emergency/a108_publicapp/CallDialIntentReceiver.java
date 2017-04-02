@@ -39,7 +39,7 @@ public class CallDialIntentReceiver extends BroadcastReceiver{
                 if (intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)!=null){
                     Log.d("test", "onReceive() called with: context = [" + context + "], intent = [" + intent + "]");
                     String mobile = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-                    if (mobile.equals("8118830489")||mobile.equals("+918118830489")||mobile.equals("08118830489")){
+                    if (intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER).equals("108")){
                         Log.d("test", "onReceive() called with: context = [" + context + "], intent = [" + intent + "]");
                         Intent i =new Intent(context, AfterPopup.class);
                         context.startService(i);
