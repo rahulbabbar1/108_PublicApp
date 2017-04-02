@@ -37,7 +37,7 @@
     android:layout_below="@+id/toolbar_layout">
 
     <FrameLayout
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="24dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"

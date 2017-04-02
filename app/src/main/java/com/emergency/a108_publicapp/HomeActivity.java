@@ -39,6 +39,9 @@ import com.androidadvance.topsnackbar.TSnackbar;
 
 import java.util.zip.Inflater;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 import static java.security.AccessController.getContext;
 
 public class HomeActivity extends AppCompatActivity {
@@ -48,7 +51,9 @@ public class HomeActivity extends AppCompatActivity {
     private ImageView callEmergency;
     private TextView nearbyMap;
     private NearbyBottomSheetDialog nearbyBottomSheetDialog;
+
     private LinearLayout hrsvLL;
+    private Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +66,7 @@ public class HomeActivity extends AppCompatActivity {
         nearbyMap = (TextView)findViewById(R.id.btn_nearby_map);
 
         snack = TSnackbar.make(findViewById(R.id.parent_home_content),"Please give Permissions.", TSnackbar.LENGTH_INDEFINITE);
-
+        ((TextView)snack.getView().findViewById(android.support.design.R.id.snackbar_text)).setTextColor(Color.WHITE);
         if(checkPermissions()){
             permissionsGranted();
         }else{
@@ -85,14 +90,25 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         hrsvLL = (LinearLayout) findViewById(R.id.hrsv_ll);
+        realm = Realm.getDefaultInstance();
         fetchTrustContacts();
     }
 
 
+
     private void fetchTrustContacts(){
-        for(int i=0;i<5;i++){
-            RelativeLayout imageView = (RelativeLayout) getLayoutInflater().inflate(R.layout.circular_item, null);
-            hrsvLL.addView(imageView);
+        RealmResults<TrustContact> contacts = realm.where(TrustContact.class).findAll();
+        for (final TrustContact contact : contacts) {
+            RelativeLayout relativeLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.circular_item, null);
+            TextView tv = (TextView) relativeLayout.findViewById(R.id.btn_trust_contact);
+            tv.setText(contact.getName());
+            tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+            hrsvLL.addView(relativeLayout);
         }
     }
 
@@ -123,7 +139,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void permissionsGranted(){
         snack.setText("Thank you. All requested permissions are available.");
-        snack.setDuration(TSnackbar.LENGTH_SHORT);
+        snack.setDuration(TSnackbar.LENGTH_LONG);
         snack.show();
         callEmergency.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_call_blue_24px));
     }
