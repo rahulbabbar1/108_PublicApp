@@ -53,6 +53,7 @@
             android:name=".CircleOfTrustActivity"
             android:label="@string/title_activity_circle_of__trust"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <service android:name=".AfterPopup"/>
     </application>
 
 </manifest>
