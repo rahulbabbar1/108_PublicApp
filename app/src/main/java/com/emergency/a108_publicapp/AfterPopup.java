@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 /**
@@ -22,7 +23,7 @@ public class AfterPopup extends Service implements View.OnTouchListener, View.On
 
     WindowManager windowManager;
     WindowManager.LayoutParams param;
-    RelativeLayout relativeLayout;
+    LinearLayout linearLayout;
 
     HomeWatcher mHomeWatcher;
     boolean isVisible;
@@ -48,10 +49,10 @@ public class AfterPopup extends Service implements View.OnTouchListener, View.On
         param.gravity = Gravity.CENTER;
 
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        relativeLayout = (RelativeLayout) layoutInflater.inflate(R.layout.popup, null);
+        linearLayout = (LinearLayout) layoutInflater.inflate(R.layout.popup, null);
 
-        relativeLayout.setOnTouchListener(this);
-        relativeLayout.setOnKeyListener(this);
+        linearLayout.setOnTouchListener(this);
+        linearLayout.setOnKeyListener(this);
 
         isVisible = false;
 
@@ -105,14 +106,14 @@ public class AfterPopup extends Service implements View.OnTouchListener, View.On
 
     private void show(){
         if(!isVisible){
-            windowManager.addView(relativeLayout, param);
+            windowManager.addView(linearLayout, param);
             isVisible = true;
         }
     }
 
     private void hide(){
         if(isVisible){
-            windowManager.removeView(relativeLayout);
+            windowManager.removeView(linearLayout);
             isVisible = false;
         }
     }

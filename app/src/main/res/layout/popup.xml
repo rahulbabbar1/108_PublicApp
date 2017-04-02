@@ -1,17 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#eeeeee"
+    android:padding="16dp"
+    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored">
+
+        <EditText
+            android:id="@+id/input_victim_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Count of Victims"
+            android:textSize="16sp"
+            android:textColor="#666666"
+            android:textColorHint="#666666"
+            android:inputType="number"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="testing 1"/>
-    <TextView
+        android:textColor="#666666"
+        android:textSize="16sp"
+        android:text="Severity of Condition"/>
+
+    <RatingBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="testing 2"/>
-    <TextView
-        android:layout_width="wrap_content"
+        android:stepSize="1.0"
+        android:numStars="5"
+        android:rating="2.0"
+        
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="testing 3"/>
-</RelativeLayout>
+        android:orientation="horizontal"
+        android:padding="8dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Need doctor"
+            android:textSize="16sp"
+            android:textColor="#666666"
+            android:layout_marginRight="16dp"/>
+        <CheckBox
+            android:id="@+id/chkbx_need_doc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_send_req_details"
+        android:text="Send Request Details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        android:background="@color/colorPrimary"/>
+</LinearLayout>
