@@ -67,6 +67,9 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     public Activity trackActivity;
     private String requestId;
     private String uid,city;
+    private String phoneNo = "";
+    private String name = "";
+    private String latUser,lngUser;
 
     private TextView userTV, phoneTV;
     TextView timeLeft;
@@ -134,7 +137,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
         phoneTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callPhone(phoneTV.getText().toString());
+                callPhone(phoneNo);
             }
         });
         findViewById(R.id.imagePhone).setOnClickListener(new View.OnClickListener() {
@@ -214,6 +217,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
             if (lat.length() != 0 && lng.length() != 0) {
                 LatLng latLng = new LatLng(Float.parseFloat(lat), Float.parseFloat(lng));
                 CameraPosition target = CameraPosition.builder().target(latLng).zoom(15).build();
+                m_map.clear();
                 clientPosition = new MarkerOptions().position(latLng).title("Emergency");
                 m_map.moveCamera(CameraUpdateFactory.newCameraPosition(target));
                 m_map.addMarker(clientPosition);
@@ -288,6 +292,8 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onDataChange() called with: dataSnapshot = [" + dataSnapshot.toString() + "]");
                 uid = dataSnapshot.child("driverId").getValue().toString();
+                latUser = dataSnapshot.child("latitude").getValue().toString();
+                lngUser = dataSnapshot.child("longitude").getValue().toString();
                 getCity("cityData/" + uid);
                 Log.d(TAG, "get data onDataChange() called with: uid = [" + uid + "]");
             }
@@ -320,7 +326,7 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
             }
         };
         //Log.d(TAG, "onResponse() called with: phoneNumer =[" + phoneNumber + "]");
-        VolleyRequest volleyRequest= new VolleyRequest("&origins="+lat+","+lng+"&destinations="+lat+","+lng, responseListener, errorListener);
+        VolleyRequest volleyRequest= new VolleyRequest("&origins="+lat+","+lng+"&destinations="+latUser+","+lngUser, responseListener, errorListener);
         volleyRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 5, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(volleyRequest);
@@ -329,6 +335,20 @@ public class TrackActivity extends AppCompatActivity implements OnMapReadyCallba
     public void getDriverLocation() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("driver/" + city + "/" + uid);
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                phoneNo = dataSnapshot.child("phone").getValue().toString();
+                name = dataSnapshot.child("name").getValue().toString();
+                phoneTV.setText(phoneNo);
+                userTV.setText(name);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
